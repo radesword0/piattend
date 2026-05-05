@@ -1,0 +1,14 @@
+# PiAttend dependencies
+# Install with: pip install -r requirements.txt
+#
+# On Raspberry Pi, also install opencv with:
+#   sudo apt-get install python3-opencv
+# or via pip (slower build):
+#   pip install opencv-contrib-python-headless
+
+flask>=2.3
+opencv-contrib-python>=4.8   # includes cv2.face (LBPH) — use headless on Pi
+numpy>=1.24
+# RPi.GPIO is pre-installed on Raspberry Pi OS; no pip needed on Pi
+# Uncomment below only if on Pi and not already present:
+# RPi.GPIO>=0.7

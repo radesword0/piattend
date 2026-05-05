@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title_suffix %} — Attendance History{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Attendance History</h1>
+  <div class="header-actions">
+    <form method="GET" action="{{ url_for('main.history') }}" class="inline-form">
+      <input type="date" name="date" value="{{ filter_date }}" max="{{ today }}">
+      <button type="submit" class="btn btn-secondary">Filter</button>
+      {% if filter_date %}
+        <a href="{{ url_for('main.history') }}" class="btn btn-ghost">Clear</a>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+{% if records %}
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Student ID</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Method</th>
+      <th>Confidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in records %}
+    <tr>
+      <td>{{ r.date }}</td>
+      <td>{{ r.time }}</td>
+      <td>{{ r.student_id }}</td>
+      <td><strong>{{ r.student_name }}</strong></td>
+      <td><span class="badge badge-{{ r.status | lower }}">{{ r.status }}</span></td>
+      <td>
+        {% if r.method == "Face" %}
+          <span class="badge badge-face">Face</span>
+        {% else %}
+          <span class="badge badge-keypad">Keypad</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if r.confidence is not none %}
+          {{ "%.1f" | format(r.confidence) }}
+        {% else %}
+          &mdash;
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+  {% if filter_date %}
+    <p>No records found for {{ filter_date }}.</p>
+  {% else %}
+    <p>No attendance records yet.</p>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

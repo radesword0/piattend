@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title_suffix %} — Enrolled Students{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Enrolled Students</h1>
+  <div class="header-actions">
+    <a href="{{ url_for('main.enroll') }}" class="btn btn-primary">+ Enroll New Student</a>
+  </div>
+</div>
+
+{% if students %}
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Student ID</th>
+      <th>Name</th>
+      <th>Face Samples</th>
+      <th>Enrolled At</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in students %}
+    <tr>
+      <td>{{ s.student_id }}</td>
+      <td><strong>{{ s.name }}</strong></td>
+      <td>
+        <span class="sample-count {% if s.face_sample_count >= 20 %}good{% else %}low{% endif %}">
+          {{ s.face_sample_count }}
+        </span>
+      </td>
+      <td>{{ s.enrolled_at }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+  <p>No students enrolled yet.</p>
+  <a href="{{ url_for('main.enroll') }}" class="btn btn-primary">Enroll First Student</a>
+</div>
+{% endif %}
+{% endblock %}

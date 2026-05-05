@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PiAttend{% block title_suffix %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav>
+    <div class="nav-brand">PiAttend</div>
+    <div class="nav-links">
+      <a href="{{ url_for('main.index') }}"    class="{% if request.endpoint == 'main.index'    %}active{% endif %}">Today</a>
+      <a href="{{ url_for('main.history') }}"  class="{% if request.endpoint == 'main.history'  %}active{% endif %}">History</a>
+      <a href="{{ url_for('main.students') }}" class="{% if request.endpoint == 'main.students' %}active{% endif %}">Students</a>
+      <a href="{{ url_for('main.enroll') }}"   class="{% if request.endpoint == 'main.enroll'   %}active{% endif %}">Enroll</a>
+    </div>
+  </nav>
+
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>PiAttend &mdash; Smart Attendance Tracker &mdash; Raspberry Pi 3B+</p>
+  </footer>
+
+</body>
+</html>

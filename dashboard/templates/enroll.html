@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title_suffix %} — Enroll Student{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Enroll New Student</h1>
+</div>
+
+<div class="form-card">
+  <p class="form-info">
+    After submitting, the camera will open and capture
+    face samples automatically. Make sure the student is
+    seated in front of the camera before submitting.
+  </p>
+
+  <form method="POST" action="{{ url_for('main.enroll') }}">
+    <div class="form-group">
+      <label for="student_id">Student ID <span class="required">*</span></label>
+      <input type="text" id="student_id" name="student_id"
+             placeholder="e.g. 1042" pattern="\d+" required
+             inputmode="numeric">
+      <small>Digits only — this is what students enter on the keypad as fallback.</small>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Full Name <span class="required">*</span></label>
+      <input type="text" id="name" name="name"
+             placeholder="e.g. Jane Smith" required>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Start Enrollment</button>
+      <a href="{{ url_for('main.students') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<div class="form-card" style="margin-top: 1.5rem;">
+  <h2>Enrollment Tips</h2>
+  <ul>
+    <li>Student should face the camera directly with good lighting.</li>
+    <li>The system will capture {{ config.FACE_SAMPLES_COUNT if config is defined else 30 }} images automatically.</li>
+    <li>Avoid glasses, hats, or strong backlighting during enrollment for best accuracy.</li>
+    <li>The model retrains automatically after each enrollment.</li>
+  </ul>
+</div>
+{% endblock %}

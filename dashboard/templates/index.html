@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title_suffix %} — Today's Attendance{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Attendance &mdash; {{ today }}</h1>
+  <div class="header-actions">
+    <a href="{{ url_for('main.export_csv') }}" class="btn btn-secondary">Export CSV</a>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card stat-present">
+    <div class="stat-number">{{ present_count }}</div>
+    <div class="stat-label">Present</div>
+  </div>
+  <div class="stat-card stat-late">
+    <div class="stat-number">{{ late_count }}</div>
+    <div class="stat-label">Late</div>
+  </div>
+  <div class="stat-card stat-total">
+    <div class="stat-number">{{ records | length }}</div>
+    <div class="stat-label">Total Check-ins</div>
+  </div>
+</div>
+
+{% if records %}
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Student ID</th>
+      <th>Name</th>
+      <th>Time</th>
+      <th>Status</th>
+      <th>Method</th>
+      <th>Confidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in records %}
+    <tr>
+      <td>{{ r.student_id }}</td>
+      <td><strong>{{ r.student_name }}</strong></td>
+      <td>{{ r.time }}</td>
+      <td><span class="badge badge-{{ r.status | lower }}">{{ r.status }}</span></td>
+      <td>
+        {% if r.method == "Face" %}
+          <span class="badge badge-face">Face</span>
+        {% else %}
+          <span class="badge badge-keypad">Keypad</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if r.confidence is not none %}
+          {{ "%.1f" | format(r.confidence) }}
+        {% else %}
+          &mdash;
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+  <p>No check-ins recorded yet today.</p>
+  <p>Check-in mode will log students here as they arrive.</p>
+</div>
+{% endif %}
+{% endblock %}
